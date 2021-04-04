@@ -1,13 +1,8 @@
 const request = require("supertest");
 const app = require("../../../src/app");
 
-/*beforeWorker(async () => {
-    db = await createDatabase(`db_${process.env.JEST_WORKER_ID}`);
-});
-*/
-
 describe("Authentication", () => {
-    test("It should response the GET method", async() => {
+    test("It should response the POST method", async() => {
         const user =  {
             username: "contato@williamtenorio.com.br",
             password: "123123"
