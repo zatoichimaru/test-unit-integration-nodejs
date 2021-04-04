@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    web:
+        container_name: web
+        build: .
+        restart: always
+        env_file:
+            - .env-${APP_ENV}
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+        depends_on:
+            - db
+        links:
+            - db
+        ports:
+            - ${APP_PORT}:${APP_PORT}
+        command: npm run ${APP_ENV}
+
+    db:
+        container_name: db
+        image: postgres:latest
+        restart: unless-stopped
+        env_file:
+            - .env-${APP_ENV}
+        environment:
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - dbdata-volume:/data/postgres
+        ports:
+            - ${DB_PORT}:${DB_PORT}
+
+volumes:
+    dbdata-volume:
