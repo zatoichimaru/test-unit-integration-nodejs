@@ -26,7 +26,7 @@
   "scripts": {
     "start": "APP_ENV=prod node /src/app.js",
     "dev": "APP_ENV=dev sequelize db:migrate && nodemon /src/app.js  --ignore __tests__",
-    "test": "APP_ENV=test sequelize db:migrate && jest --coverage --colors --forceExit"
+    "test": "APP_ENV=test sequelize db:migrate && jest --coverage --colors --verbose --forceExit"
   },
   "repository": {
     "type": "git",
