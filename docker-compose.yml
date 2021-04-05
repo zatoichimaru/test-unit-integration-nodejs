@@ -31,7 +31,7 @@ services:
         volumes:
             - dbdata-volume:/data/postgres
         ports:
-            - ${DB_PORT}:${DB_PORT}
+            - ${DB_PORT}:5432
 
 volumes:
     dbdata-volume:

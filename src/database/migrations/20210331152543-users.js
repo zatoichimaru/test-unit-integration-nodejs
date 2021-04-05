@@ -7,7 +7,7 @@ module.exports = {
                 primaryKey: true,
                 allowNull: false
             },
-            username: {
+            email: {
                 type: Sequelize.STRING,
                 allowNull: false
             },

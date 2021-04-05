@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const app = express();
 const {
+    APP_ENV,
     APP_URL,
     APP_PORT,
     DB_DATABASE,
@@ -19,8 +20,10 @@ app.use(cors());
 app.use(express.json());
 app.use(require("./routes"));
 
-app.listen(APP_PORT, () => {
-    console.log(`Setup [ON]: ${APP_URL}:${APP_PORT}`);
-});
+if (APP_ENV !== 'test') {
+    app.listen(APP_PORT, () => {
+        console.log(`Setup [ON]: ${APP_URL}:${APP_PORT}`);
+    });
+}
 
 module.exports = app;

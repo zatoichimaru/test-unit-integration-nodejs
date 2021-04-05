@@ -7,14 +7,14 @@ module.exports = new class AuthController {
 
         try {
 
-            const { username, password } = req.body;
+            const { email, password } = req.body;
             let passwordHash = await bcrypt.hash(password, 10);
-            let user = await Users.findOne({ where: { username: username } });
+            let user = await Users.findOne({ where: { email: email } });
 
             if (!user) {
                 user = await Users.create({
                     id: uuidv4(),
-                    username: username,
+                    email: email,
                     password: passwordHash
                 });
 
@@ -32,8 +32,8 @@ module.exports = new class AuthController {
     async signin(req, res) {
         try {
 
-            const { username, password } = req.body;
-            let user = await Users.findOne({ where: { username: username } });
+            const { email, password } = req.body;
+            let user = await Users.findOne({ where: { email: email } });
 
             if (!user) {
                 return res.status(401).json({ message: "User not found" });
