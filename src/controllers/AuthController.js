@@ -1,38 +1,54 @@
-const Users = require("../models/Users");
+const { Users } = require("../models");
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require("bcryptjs");
 
 module.exports = new class AuthController {
     async signup(req, res) {
-        const { username, password } = req.body;
-        let user = await Users.findOne({ where: { username:username } });
 
-        if (!user) {
-            user = await Users.create({
-                id: uuidv4(),
-                username: username,
-                password: password
-            });
+        try {
+
+            const { username, password } = req.body;
+            let passwordHash = await bcrypt.hash(password, 10);
+            let user = await Users.findOne({ where: { username: username } });
+
+            if (!user) {
+                user = await Users.create({
+                    id: uuidv4(),
+                    username: username,
+                    password: passwordHash
+                });
+
+                return res.status(201).json(user);
+            }
+            
+            return res.status(401).json({ message: "User already exists" });
+
+        } catch(error){
+            return res.status(400).json({ message: error.message });
         }
-
-        return res.status(200).json(user);
     }
 
 
     async signin(req, res) {
-        const { username, password } = req.body;
-        const user = await Users.findOne({ where: { username:username } });
+        try {
 
-        if (!user) {
-            return res.status(401).json({ message: "User not found" });
+            const { username, password } = req.body;
+            let user = await Users.findOne({ where: { username: username } });
+
+            if (!user) {
+                return res.status(401).json({ message: "User not found" });
+            }
+
+            await bcrypt.compare(password, user.password, (err, result) => {
+	            if (err) {
+                    return res.status(401).json({ message: "Incorrect password" });
+	            }
+	        });
+            
+            return res.status(200).json(user);
+
+        } catch(error){
+            throw new Error(error.message);
         }
-
-        /*if (!(await user.checkPassword(password))) {
-            return res.status(401).json({ message: "Incorrect password" });
-        }*/
-
-        return res.json({
-            user
-        });
-
     }
-}
+}      

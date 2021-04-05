@@ -1,16 +1,13 @@
 const { Model, DataTypes } = require('sequelize');
 
-module.exports = class Users extends Model {
-    static init(sequelize) {
-        super.init({
+module.exports = (sequelize, DataTypes) => {
+    const Users = sequelize.define(
+        "Users",
+        {
             username: DataTypes.STRING,
-            password: DataTypes.STRING
-        },{
-            sequelize
-        })
-    }
+            password: DataTypes.STRING,
+            status: DataTypes.BOOLEAN
+        });
 
-    static associate(models) {
-        //this.hasMany(models.Address, { foreignKey: 'user_id', as: 'addresses' });
-      }
-} 
+    return Users;
+};

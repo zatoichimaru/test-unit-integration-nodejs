@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 
 const app = express();
 const {
@@ -12,6 +14,8 @@ const {
     DB_PASSWORD
 } = process.env;
 
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(require("./routes"));
 
