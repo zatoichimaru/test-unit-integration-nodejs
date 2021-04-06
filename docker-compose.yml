@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
     web:
-        container_name: web
+        container_name: web-${APP_ENV}
         build: .
         restart: always
         env_file:
@@ -19,7 +19,7 @@ services:
         command: npm run ${APP_ENV}
 
     db:
-        container_name: db
+        container_name: db-${APP_ENV}
         image: postgres:latest
         restart: unless-stopped
         env_file:

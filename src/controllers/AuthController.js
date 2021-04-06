@@ -24,12 +24,12 @@ module.exports = new class AuthController {
             return res.status(401).json({ message: "User already exists" });
 
         } catch(error){
-            return res.status(400).json({ message: error.message });
+            throw new Error(error.message);
         }
     }
 
-
     async signin(req, res) {
+
         try {
 
             const { email, password } = req.body;
@@ -39,12 +39,10 @@ module.exports = new class AuthController {
                 return res.status(401).json({ message: "User not found" });
             }
 
-            await bcrypt.compare(password, user.password, (err, result) => {
-	            if (err) {
-                    return res.status(401).json({ message: "Incorrect password" });
-	            }
-	        });
-            
+            if(!await bcrypt.compare(req.body.password, user.password)){
+                return res.status(401).send({ message: "Invalid Email or Password" });
+            }
+
             return res.status(200).json(user);
 
         } catch(error){
