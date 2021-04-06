@@ -1,21 +1,23 @@
 const { Users } = require("../models");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcryptjs");
+const PasswordCrypto = require("../utils/PassowordCrypto");
 
 module.exports = new class AuthController {
     async signup(req, res) {
 
         try {
 
-            const { email, password } = req.body;
-            let passwordHash = await bcrypt.hash(password, 10);
+            let { email, password } = req.body;
+            password = PasswordCrypto.encrypt(password);
+
             let user = await Users.findOne({ where: { email: email } });
 
             if (!user) {
                 user = await Users.create({
                     id: uuidv4(),
                     email: email,
-                    password: passwordHash
+                    password: password
                 });
 
                 return res.status(201).json(user);
@@ -39,7 +41,7 @@ module.exports = new class AuthController {
                 return res.status(401).json({ message: "User not found" });
             }
 
-            if(!await bcrypt.compare(req.body.password, user.password)){
+            if (password == PasswordCrypto.encrypt(user.password)){
                 return res.status(401).send({ message: "Invalid Email or Password" });
             }
 
