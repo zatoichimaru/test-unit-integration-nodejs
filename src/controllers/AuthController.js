@@ -1,15 +1,19 @@
 const { Users } = require("../models");
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require("bcryptjs");
 const PasswordCrypto = require("../utils/PassowordCrypto");
 
 module.exports = new class AuthController {
+
+    constructor(passwordCrypto = PasswordCrypto) {
+        this.passwordCrypto = passwordCrypto;
+    }
+    
     async signup(req, res) {
 
         try {
 
             let { email, password } = req.body;
-            password = PasswordCrypto.encrypt(password);
+            password = this.passwordCrypto.encrypt(password);
 
             let user = await Users.findOne({ where: { email: email } });
 
@@ -41,7 +45,7 @@ module.exports = new class AuthController {
                 return res.status(401).json({ message: "User not found" });
             }
 
-            if (password == PasswordCrypto.encrypt(user.password)){
+            if(password == this.passwordCrypto.encrypt(user.password)){
                 return res.status(401).send({ message: "Invalid Email or Password" });
             }
 
