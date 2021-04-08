@@ -12,16 +12,14 @@ module.exports = new class AuthController {
 
         try {
 
-            let { email, password } = req.body;
-            password = this.passwordCrypto.encrypt(password);
-
+            const { email, password } = req.body;
             let user = await Users.findOne({ where: { email: email } });
 
             if (!user) {
                 user = await Users.create({
                     id: uuidv4(),
                     email: email,
-                    password: password
+                    password: this.passwordCrypto.encrypt(password)
                 });
 
                 return res.status(201).json(user);
@@ -44,8 +42,8 @@ module.exports = new class AuthController {
             if (!user) {
                 return res.status(401).json({ message: "User not found" });
             }
-
-            if(password == this.passwordCrypto.encrypt(user.password)){
+ 
+            if(this.passwordCrypto.encrypt(password) != user.password){
                 return res.status(401).send({ message: "Invalid Email or Password" });
             }
 

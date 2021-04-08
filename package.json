@@ -1,12 +1,12 @@
 {
   "name": "test-unit-integration-nodejs",
   "version": "1.0.0",
-  "description": "- docker-compose --env-file=.env-prod up --build -d",
+  "description": "",
   "main": "src/app.js",
   "scripts": {
     "start": "APP_ENV=prod node /src/app.js",
     "dev": "APP_ENV=dev sequelize db:migrate && nodemon /src/app.js  --ignore __tests__",
-    "test": "APP_ENV=test sequelize db:migrate && jest --coverage --colors --verbose --detectOpenHandles --forceExit"
+    "test": "APP_ENV=test sequelize db:migrate && jest --coverage --colors --verbose --detectOpenHandles --forceExit "
   },
   "repository": {
     "type": "git",
