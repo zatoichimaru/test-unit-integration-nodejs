@@ -4,7 +4,6 @@ services:
     web:
         container_name: web-${APP_ENV}
         build: .
-        restart: always
         env_file:
             - .env-${APP_ENV}
         volumes:
